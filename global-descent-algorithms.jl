@@ -1,4 +1,4 @@
-function mr(A, M, itmax, tol; stopping_criterion=:res)
+function mr(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   AR = spzeros(n, n)
@@ -30,9 +30,10 @@ function mr(A, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("mr it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2)")
-    if (err < tol)
+             nnz(M)/n^2 = $s")
+    if (err < tol) || (s > smax)
       break
     end
   end
@@ -42,7 +43,7 @@ function mr(A, M, itmax, tol; stopping_criterion=:res)
   return M, R_norm[1:i+1]
 end
 
-function pmr(A, Pr, M, itmax, tol; stopping_criterion=:res)
+function pmr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   Z = spzeros(n, n)
@@ -79,9 +80,10 @@ function pmr(A, Pr, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("pmr it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2)")
-    if (err < tol)
+             nnz(M)/n^2 = $s")
+    if (err < tol) || (s > smax)
       break
     end
   end
@@ -99,6 +101,7 @@ function pmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
   PrA = spzeros(n, n)
   PrAZ = spzeros(n, n)
   W = Z
+  AR = PrAZ
   A_cols_dot_prods = Diagonal(vec(sum(abs2, A, dims=1)))
   R_norm = zeros(itmax + 1)
   if stopping_criterion == :backward_error
@@ -120,7 +123,7 @@ function pmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
     PrAZ_norm_square = frob_norm_squared(PrAZ)
     alpha = Z_PrAZ_frob / PrAZ_norm_square
     M .+= alpha .* Z
-    dropping_M!(M, W, AR, R, A_cols_dot_prods, A, m)
+    dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
     Z .= Pr * R
     PrAZ .= PrA * Z
     i += 1
@@ -143,7 +146,7 @@ function pmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
   return M, R_norm[1:i+1]
 end
 
-function lopmr(A, Pr, M, itmax, tol; stopping_criterion=:res)
+function lopmr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   Z = spzeros(n, n)
@@ -199,10 +202,11 @@ function lopmr(A, Pr, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("lopmr it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2),
+             nnz(M)/n^2 = $s,
              nnz(P)/n^2 = $(nnz(P)/n^2)")
-    if (err < tol)
+    if (err < tol) || (s > smax)
       break
     end
     Z .= Pr * R
@@ -347,7 +351,7 @@ function lopmr_spai_split(A, L, M, itmax, tol, s; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
-    println("lopmr-spai it = $i, err = $err, 
+    println("lopmr-spai-split it = $i, err = $err, 
              nnz(M)/n^2 = $(nnz(M)/n^2), 
              nnz(P)/n^2 = $(nnz(P)/n^2)")
     if (err < tol)
@@ -361,7 +365,7 @@ function lopmr_spai_split(A, L, M, itmax, tol, s; stopping_criterion=:res)
   return M, R_norm[1:i+1]
 end
 
-function sd(A, M, itmax, tol; stopping_criterion=:res)
+function sd(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   P = spzeros(n, n)
@@ -396,10 +400,11 @@ function sd(A, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("sd it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2),
+             nnz(M)/n^2 = $s,
              nnz(P)/n^2 = $(nnz(P)/n^2)")
-    if (err < tol)
+    if (err < tol) || (s > smax)
       break
     end
   end
@@ -409,7 +414,7 @@ function sd(A, M, itmax, tol; stopping_criterion=:res)
   return M, R_norm[1:i+1]
 end
 
-function psd(A, Pr, M, itmax, tol; stopping_criterion=:res)
+function psd(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   Z = spzeros(n, n)
@@ -450,10 +455,11 @@ function psd(A, Pr, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("psd it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2),
+             nnz(M)/n^2 = $s,
              nnz(P)/n^2 = $(nnz(P)/n^2)")
-    if (err < tol)
+    if (err < tol) || (s > smax)
       break
     end
   end
@@ -463,7 +469,7 @@ function psd(A, Pr, M, itmax, tol; stopping_criterion=:res)
   return M, R_norm[1:i+1]
 end
 
-function cg(A, M, itmax, tol; stopping_criterion=:res)
+function cg(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   G = spzeros(n, n)
@@ -501,10 +507,11 @@ function cg(A, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("cg it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2),
+             nnz(M)/n^2 = $s,
              nnz(P)/n^2 = $(nnz(P)/n^2)")
-    if (err < tol)
+    if (err < tol) || (s > smax)
       break
     end
     beta *= R_G_frob
@@ -518,7 +525,7 @@ function cg(A, M, itmax, tol; stopping_criterion=:res)
   return M, R_norm[1:i+1]
 end
 
-function pcg(A, Pr, M, itmax, tol; stopping_criterion=:res)
+function pcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   Z = spzeros(n, n)
@@ -561,10 +568,11 @@ function pcg(A, Pr, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("pcg it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2),
+             nnz(M)/n^2 = $s,
              nnz(P)/n^2 = $(nnz(P)/n^2)")
-    if (err < tol)
+    if (err < tol) || (s > smax)
       break
     end
     beta *= R_G_frob
@@ -578,7 +586,7 @@ function pcg(A, Pr, M, itmax, tol; stopping_criterion=:res)
   return M, R_norm[1:i+1]
 end
 
-function cr(A, M, itmax, tol; stopping_criterion=:res)
+function cr(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   P = spzeros(n, n)
@@ -613,10 +621,11 @@ function cr(A, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("cr it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2), 
+             nnz(M)/n^2 = $s, 
              nnz(P)/n^2 = $(nnz(P)/n^2)")
-    if (err < tol)
+    if (err < tol) || (s > smax)
       break
     end
     beta *= R_frob_norm_squared
@@ -630,7 +639,7 @@ function cr(A, M, itmax, tol; stopping_criterion=:res)
   return M, R_norm[1:i+1]
 end
 
-function pcr(A, Pr, M, itmax, tol; stopping_criterion=:res)
+function pcr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   P = spzeros(n, n)
@@ -668,10 +677,11 @@ function pcr(A, Pr, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("pcr it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2), 
+             nnz(M)/n^2 = $s, 
              nnz(P)/n^2 = $(nnz(P)/n^2)")
-    if (err < tol)
+    if (err < tol) || (s > smax)
       break
     end
     beta *= R_Z_frob
@@ -746,7 +756,7 @@ function pcr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
   return M, R_norm[1:i+1]
 end
 
-function lopcr(A, Pr, M, itmax, tol; stopping_criterion=:res)
+function lopcr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   Z = spzeros(n, n)
@@ -797,10 +807,11 @@ function lopcr(A, Pr, M, itmax, tol; stopping_criterion=:res)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
+    s = nnz(M) / n^2
     println("lopcr it = $i, err = $err, 
-             nnz(M)/n^2 = $(nnz(M)/n^2), 
+             nnz(M)/n^2 = $s, 
              nnz(P)/n^2 = $(nnz(P)/n^2)")
-    if (err < tol)
+    if (err < tol) || (s > smax)
       break
     end
     P .*= gamma / delta
