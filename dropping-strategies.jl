@@ -1,6 +1,7 @@
 function dropping_M!(M, W, R, AR, D, A, m)
   M .+= M'
   M ./= 2.
+  droptol!(M, eps(Float64))
 
   R .= I - A * M
 
@@ -31,6 +32,7 @@ function dropping_M!(M, W, R, AR, D, A, m)
 end
 
 function dropping_P!(P, m)
+  droptol!(P, eps(Float64))
   if nnz(P) <= m
     return
   end
