@@ -63,7 +63,7 @@ s = .03
 Pr = spdiagm(diag(A).^-1)
 M0 = spdiagm(ones(n))
 
- 
+
 dt = @elapsed M, R_norm = pmr_spai(A, Pr, copy(M0), itmax["pmr"], tol, s)
 npzwrite("data/Experiment05_" * matrix * "_R_norm_pmr_spai.npz", R_norm)
 mmwrite("data/Experiment05_" * matrix * "_M_pmr_spai.mtx", M)
