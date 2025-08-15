@@ -93,7 +93,7 @@ function pmr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   return M, R_norm[1:i+1]
 end
 
-function pmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
+function pmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
   n = A.n
   m = round(Int, s * n * n)
   R = spzeros(n, n)
@@ -107,6 +107,14 @@ function pmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
   if stopping_criterion == :backward_error
     A_norm = frob_norm(A)
     backward_error = zeros(itmax + 1)
+  end
+  if eval_pcg
+    seed!(1)
+    pcg_tol = 1e-6
+    b = A * rand(n)
+    pcg_iters = zeros(Int, itmax + 1)
+    _, pcg_iters[1], _ = pcg(A, b, zeros(n), M, 1e-6, n)
+    println("pcg iters = $(pcg_iters[1])")
   end
   PrA .= Pr * A
   dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
@@ -129,6 +137,10 @@ function pmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
     i += 1
     R_norm[i + 1] = frob_norm(R)
     err = R_norm[i + 1]
+    if eval_pcg
+      _, pcg_iters[i+1], _ = pcg(A, b, zeros(n), M, pcg_tol, pcg_iters[1])
+      println("pcg iters = $(pcg_iters[i+1])")
+    end
     if stopping_criterion == :backward_error
       M_norm = frob_norm(M)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
@@ -142,6 +154,9 @@ function pmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
   end
   if stopping_criterion == :backward_error
     return M, R_norm[1:i+1], backward_error[1:i+1]
+  end
+  if eval_pcg
+    return M, R_norm[1:i+1], pcg_iters[1:i+1]
   end
   return M, R_norm[1:i+1]
 end
@@ -217,7 +232,7 @@ function lopmr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   return M, R_norm[1:i+1]
 end
 
-function lopmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
+function lopmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
   n = A.n
   m = round(Int, s * n * n)
   R = spzeros(n, n)
@@ -235,6 +250,14 @@ function lopmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
   if stopping_criterion == :backward_error
     A_norm = frob_norm(A)
     backward_error = zeros(itmax + 1)
+  end
+  if eval_pcg
+    seed!(1)
+    pcg_tol = 1e-6
+    b = A * rand(n)
+    pcg_iters = zeros(Int, itmax + 1)
+    _, pcg_iters[1], _ = pcg(A, b, zeros(n), M, 1e-6, n)
+    println("pcg iters = $(pcg_iters[1])")
   end
   PrA .= Pr * A
   dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
@@ -274,6 +297,10 @@ function lopmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
     i += 1
     R_norm[i + 1] = frob_norm(R)
     err = R_norm[i + 1]
+    if eval_pcg
+      _, pcg_iters[i+1], _ = pcg(A, b, zeros(n), M, pcg_tol, pcg_iters[1])
+      println("pcg iters = $(pcg_iters[i+1])")
+    end
     if stopping_criterion == :backward_error
       M_norm = frob_norm(M)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
@@ -289,6 +316,9 @@ function lopmr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
   end
   if stopping_criterion == :backward_error
     return M, R_norm[1:i+1], backward_error[1:i+1]
+  end
+  if eval_pcg
+    return M, R_norm[1:i+1], pcg_iters[1:i+1]
   end
   return M, R_norm[1:i+1]
 end
@@ -695,7 +725,7 @@ function pcr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   return M, R_norm[1:i+1]
 end
 
-function pcr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
+function pcr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
   n = A.n
   m = round(Int, s * n * n)
   R = spzeros(n, n)
@@ -709,6 +739,14 @@ function pcr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
   if stopping_criterion == :backward_error
     A_norm = frob_norm(A)
     backward_error = zeros(itmax + 1)
+  end
+  if eval_pcg
+    seed!(1)
+    pcg_tol = 1e-6
+    b = A * rand(n)
+    pcg_iters = zeros(Int, itmax + 1)
+    _, pcg_iters[1], _ = pcg(A, b, zeros(n), M, 1e-6, n)
+    println("pcg iters = $(pcg_iters[1])")
   end
   dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
   Z .= Pr * R
@@ -733,6 +771,10 @@ function pcr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
     i += 1
     R_norm[i + 1] = frob_norm(R)
     err = R_norm[i + 1]
+    if eval_pcg
+      _, pcg_iters[i+1], _ = pcg(A, b, zeros(n), M, pcg_tol, pcg_iters[1])
+      println("pcg iters = $(pcg_iters[i+1])")
+    end
     if stopping_criterion == :backward_error
       M_norm = frob_norm(M)
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
@@ -752,6 +794,9 @@ function pcr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res)
   end
   if stopping_criterion == :backward_error
     return M, R_norm[1:i+1], backward_error[1:i+1]
+  end
+  if eval_pcg
+    return M, R_norm[1:i+1], pcg_iters[1:i+1]
   end
   return M, R_norm[1:i+1]
 end

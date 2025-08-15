@@ -3,6 +3,7 @@ module MySPAI
 using LinearAlgebra
 using SparseArrays
 using LinearMaps: FunctionMap
+using Random: seed!
 
 export frob_inner_prod, frob_norm, frob_norm_squared, res_frob_norm
 export mr, sd, cg, cr
