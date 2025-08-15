@@ -13,7 +13,11 @@ using NPZ
 matrix_source = "../matrix-market/"
 
 
-matrix = "msc04515"  # \in {"bcsstk21", "tri100eigs4k", "msc04515"}
+matrix = "triunif4k"  # \in {"bcsstk21", 
+                      #      "tri100eigs4k", 
+                      #      "triclust4k",
+                      #      "triunif4k",
+                      #      "msc04515"}
 
 if matrix == "bcsstk21" # Structural problem
   A = mmread(matrix_source * "bcsstk21.mtx")
@@ -26,6 +30,29 @@ elseif matrix == "tri100eigs4k" # Custom matrix
   mmwrite(matrix_source * "tri100eigs4k.mtx", A)
   n = A.n # n = 4,000 | nnz = 11,998
   itmax = 300
+elseif matrix == "triclust4k"
+  seed!(1)
+  n = 4_000
+  vals = vcat(Vector(1e-9:1e-9:(n-1)*1e-9), 1.)
+  Q, _ = qr(rand(n, n))
+  A = Q * spdiagm(vals) * Q'
+  F = hessenberg(A)
+  A = spdiagm(0=>diag(F.H, 0), 1=>diag(F.H, 1), -1=>diag(F.H, -1))
+  mmwrite(matrix_source * "triclust4k.mtx", A)
+  n = A.n # n = 4,000 | nnz = 11,998
+  itmax = 1_000
+elseif matrix == "triunif4k"
+  seed!(1)
+  n = 4_000
+  dt = (1. - 1e-9) / (n - 1)
+  vals = Vector(1e-9:dt:1.)
+  Q, _ = qr(rand(n, n))
+  A = Q * spdiagm(vals) * Q'
+  F = hessenberg(A)
+  A = spdiagm(0=>diag(F.H, 0), 1=>diag(F.H, 1), -1=>diag(F.H, -1))
+  mmwrite(matrix_source * "triunif4k.mtx", A)
+  n = A.n # n = 4,000 | nnz = 11,998
+  itmax = 1_000
 elseif matrix == "msc04515" # Structural problem
   A = mmread(matrix_source * "msc04515.mtx")
   n = A.n # n = 4,515 | nnz = 97,707

@@ -41,7 +41,11 @@ def plot_spectra_simple(spectra_dict, matrix_name, figsize=(5.5, 3.5), fontsize=
     return fig
 
 
-matrix = "msc04515" # \in {"bcsstk21", "tri100eigs4k", "msc04515"}
+matrix = "triunif4k"  # \in {"bcsstk21", 
+                      #      "tri100eigs4k", 
+                      #      "triclust4k",
+                      #      "triunif4k",
+                      #      "msc04515"}
 
 fontsize = 10.5
 

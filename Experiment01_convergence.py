@@ -7,7 +7,12 @@ plt.rc('text.latex', preamble=r'\usepackage{amssymb} \usepackage{amsmath}')
 plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
-matrix = "msc04515" # \in {"bcsstk21", "tri100eigs4k", "msc04515"}
+matrix = "triunif4k"  # \in {"bcsstk21", 
+                      #      "tri100eigs4k", 
+                      #      "triclust4k",
+                      #      "triunif4k",
+                      #      "msc04515"}
+
 fontsize = 10.5
 
 R_norm_psd = np.load("data/Experiment01_" + matrix + "_R_norm_psd.npz")

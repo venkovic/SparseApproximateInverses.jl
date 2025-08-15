@@ -7,12 +7,14 @@ plt.rc('text.latex', preamble=r'\usepackage{amssymb} \usepackage{amsmath}')
 plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
-fontsize = 10.5
+fontsize = 10
 
 matrix_source = "../matrix-market/"
 
 matrices = ("bcsstk21", 
             "tri100eigs4k", 
+            "triclust4k",
+            "triunif4k",
             "msc04515",
             "bundle1", 
             "4bw100eigs20k", 
@@ -24,6 +26,8 @@ matrices = ("bcsstk21",
 
 mtx_files = ("bcsstk21.mtx", 
              "tri100eigs4k.mtx", 
+             "triclust4k.mtx",
+             "triunif4k.mtx",
              "msc04515.mtx",
              "bundle1.mtx", 
              "4bw100eigs20k.mtx", 
@@ -33,12 +37,12 @@ mtx_files = ("bcsstk21.mtx",
              "wathen100.mtx",
              "Poisson_SExp_sig21.0_L0.1_DoF32000_K.mtx")
 
-fig = plt.figure(figsize=(6, 3))
-gs = gridspec.GridSpec(2, 5, wspace=0.1, hspace=0.03)
+fig = plt.figure(figsize=(7.5, 3))
+gs = gridspec.GridSpec(2, 6, wspace=0.1, hspace=0.03)
 
 for i, (fname, mtx) in enumerate(zip(mtx_files, matrices)):
-    row = i // 5 
-    col = i % 5
+    row = i // 6 
+    col = i % 6
     
     ax = fig.add_subplot(gs[row, col])
     
