@@ -3,6 +3,11 @@ function dropping_M!(M, W, R, AR, D, A, m)
   M ./= 2.
   droptol!(M, eps(Float64))
 
+  d_nnz = length(diag(M).nzval)
+  if d_nnz < M.n
+    println("Warning: $(M.n - d_nnz) diagonal components were dropped in M.")
+  end
+
   R .= I - A * M
 
   if nnz(M) <= m
