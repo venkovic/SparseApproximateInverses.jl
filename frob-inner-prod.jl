@@ -1,13 +1,13 @@
 function frob_inner_prod(X, Y)
-  return sum(X .* Y)
+  return dot(X, Y)
 end
 
 function frob_norm(X)
-  return sqrt(sum(X .^ 2))
+  return sqrt(dot(X, X))
 end
 
 function frob_norm_squared(X)
-  return sum(X .^ 2)
+  return dot(X, X)
 end
 
 function res_frob_norm(A, M)
