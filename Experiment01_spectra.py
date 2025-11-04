@@ -41,7 +41,7 @@ def plot_spectra_simple(spectra_dict, matrix_name, figsize=(5.5, 3.5), fontsize=
     return fig
 
 
-matrix = "triunif4k"  # \in {"bcsstk21", 
+matrix = "bcsstk21"  # \in {"bcsstk21", 
                       #      "tri100eigs4k", 
                       #      "triclust4k",
                       #      "triunif4k",
@@ -51,16 +51,16 @@ fontsize = 10.5
 
 A_spectrum = np.load("data/Experiment01_" + matrix + "_spectrum.npz")**-1
 M_spectrum_lopmr = np.load("data/Experiment01_" + matrix + "_spectrum_lopmr.npz")
-M_spectrum_pcr = np.load("data/Experiment01_" + matrix + "_spectrum_pcr.npz")
-M_spectrum_pmr = np.load("data/Experiment01_" + matrix + "_spectrum_pmr.npz")
 M_spectrum_pcg = np.load("data/Experiment01_" + matrix + "_spectrum_pcg.npz")
+M_spectrum_pmr = np.load("data/Experiment01_" + matrix + "_spectrum_pmr.npz")
+M_spectrum_npcg = np.load("data/Experiment01_" + matrix + "_spectrum_npcg.npz")
 M_spectrum_psd = np.load("data/Experiment01_" + matrix + "_spectrum_psd.npz")
 
 spectra = {r'$A^{-1}$': A_spectrum,
            'LOPMR': M_spectrum_lopmr,
-           'PCR': M_spectrum_pcr,
-           'PMR': M_spectrum_pmr,
            'PCG': M_spectrum_pcg,
+           'PMR': M_spectrum_pmr,
+           'NPCG': M_spectrum_npcg,
            'PSD': M_spectrum_psd}
 
 fig = plot_spectra_simple(spectra, matrix, fontsize=fontsize)

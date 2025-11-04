@@ -1,6 +1,6 @@
 push!(LOAD_PATH, ".")
-using MySPAI: mr, sd, cg, cr, 
-              pmr, psd, pcg, pcr, lopmr, lopcr
+using MySPAI: mr, sd, ncg, cg, 
+              pmr, psd, npcg, pcg, lopmr, lopcg
 
 using Random: seed!
 using SparseArrays
@@ -50,11 +50,11 @@ npzwrite("data/Experiment02_" * matrix * "_R_norm_pmr.npz", R_norm)
 mmwrite("data/Experiment02_" * matrix * "_M_pmr.mtx", M)
 npzwrite("data/Experiment02_" * matrix * "_spectrum_pmr.npz", eigvals(Matrix((M+M')./2.)))
 
-dt_pcr = @elapsed M, R_norm, backward_error = pcr(A, Pr, copy(M0), itmax, tol, stopping_criterion=:backward_error)
-npzwrite("data/Experiment02_" * matrix * "_backward_error_pcr.npz", backward_error)
-npzwrite("data/Experiment02_" * matrix * "_R_norm_pcr.npz", R_norm)
-mmwrite("data/Experiment02_" * matrix * "_M_pcr.mtx", M)
-npzwrite("data/Experiment02_" * matrix * "_spectrum_pcr.npz", eigvals(Matrix((M+M')./2.)))
+dt_pcg = @elapsed M, R_norm, backward_error = pcg(A, Pr, copy(M0), itmax, tol, stopping_criterion=:backward_error)
+npzwrite("data/Experiment02_" * matrix * "_backward_error_pcg.npz", backward_error)
+npzwrite("data/Experiment02_" * matrix * "_R_norm_pcg.npz", R_norm)
+mmwrite("data/Experiment02_" * matrix * "_M_pcg.mtx", M)
+npzwrite("data/Experiment02_" * matrix * "_spectrum_pcg.npz", eigvals(Matrix((M+M')./2.)))
 
 dt_lopmr = @elapsed M, R_norm, backward_error = lopmr(A, Pr, copy(M0), itmax, tol, stopping_criterion=:backward_error)
 npzwrite("data/Experiment02_" * matrix * "_backward_error_lopmr.npz", backward_error)

@@ -34,7 +34,7 @@ elseif matrix == "wathen100" # Random 2D/3D problem
   A = mmread(matrix_source * "wathen100.mtx")
   n = A.n # n = 30,401 | nnz = 471,601
 elseif matrix == "Poisson32k" # Random Poisson PDE
-  A = mmread(matrix_source * "Poisson_SExp_sig21.0_L0.1_DoF32000_K.mtx")
+  A = mmread(matrix_source * "Poisson32k.mtx")
   n = A.n # n = 31,839 | nnz = 221,375 
 end
 
@@ -52,9 +52,9 @@ M = mmread("data/Experiment05_" * matrix * "_M_pmr_spai.mtx")
 x, it, res_norm_pmr = pcg(A, b, zeros(n), M, tol, itmax)
 npzwrite("data/Experiment06_" * matrix * "_pcg-res_pmr_spai.npz", res_norm_pmr)
 
-M = mmread("data/Experiment05_" * matrix * "_M_pcr_spai.mtx")
-x, it, res_norm_pcr = pcg(A, b, zeros(n), M, tol, itmax)
-npzwrite("data/Experiment06_" * matrix * "_pcg-res_pcr_spai.npz", res_norm_pcr)
+M = mmread("data/Experiment05_" * matrix * "_M_pcg_spai.mtx")
+x, it, res_norm_pcg = pcg(A, b, zeros(n), M, tol, itmax)
+npzwrite("data/Experiment06_" * matrix * "_pcg-res_pcg_spai.npz", res_norm_pcg)
 
 M = mmread("data/Experiment05_" * matrix * "_M_lopmr_spai.mtx")
 x, it, res_norm_lopmr = pcg(A, b, zeros(n), M, tol, itmax)

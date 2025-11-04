@@ -32,9 +32,9 @@ M = mmread("data/Experiment03_" * matrix * "_M_pmr.mtx")
 x, it, res_norm_pmr = pcg(A, b, zeros(n), M, tol, itmax)
 npzwrite("data/Experiment04_" * matrix * "_pcg-res_pmr.npz", res_norm_pmr)
 
-M = mmread("data/Experiment03_" * matrix * "_M_pcr.mtx")
-x, it, res_norm_pcr = pcg(A, b, zeros(n), M, tol, itmax)
-npzwrite("data/Experiment04_" * matrix * "_pcg-res_pcr.npz", res_norm_pcr)
+M = mmread("data/Experiment03_" * matrix * "_M_pcg.mtx")
+x, it, res_norm_pcg = pcg(A, b, zeros(n), M, tol, itmax)
+npzwrite("data/Experiment04_" * matrix * "_pcg-res_pcg.npz", res_norm_pcg)
 
 M = mmread("data/Experiment03_" * matrix * "_M_lopmr.mtx")
 x, it, res_norm_lopmr = pcg(A, b, zeros(n), M, tol, itmax)

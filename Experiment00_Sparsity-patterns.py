@@ -35,7 +35,7 @@ mtx_files = ("bcsstk21.mtx",
              "rand20k.mtx",
              "rand20k2.mtx", 
              "wathen100.mtx",
-             "Poisson_SExp_sig21.0_L0.1_DoF32000_K.mtx")
+             "Poisson32k.mtx")
 
 fig = plt.figure(figsize=(7.5, 3))
 gs = gridspec.GridSpec(2, 6, wspace=0.1, hspace=0.03)

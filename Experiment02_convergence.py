@@ -11,17 +11,17 @@ matrix = "msc04515" # \in {"bcsstk21", "tri100eigs4k", "msc04515"}
 fontsize = 10.5
 
 R_norm_pmr = np.load("data/Experiment02_" + matrix + "_backward_error_pmr.npz")
-R_norm_pcr = np.load("data/Experiment02_" + matrix + "_backward_error_pcr.npz")
+R_norm_pcg = np.load("data/Experiment02_" + matrix + "_backward_error_pcg.npz")
 R_norm_lopmr = np.load("data/Experiment02_" + matrix + "_backward_error_lopmr.npz")
 
 iters_pmr = len(R_norm_pmr)
-iters_pcr = len(R_norm_pcr)
+iters_pcg = len(R_norm_pcg)
 iters_lopmr = len(R_norm_lopmr)
 
 fig, ax = plt.subplots(figsize=(5.5, 3))
 
 ax.semilogy(np.arange(0, iters_pmr), R_norm_pmr, color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='PMR', linewidth=2)
-ax.semilogy(np.arange(0, iters_pcr), R_norm_pcr, 'k:', label='PCR', linewidth=2)
+ax.semilogy(np.arange(0, iters_pcg), R_norm_pcg, 'k:', label='PCG', linewidth=2)
 ax.semilogy(np.arange(0, iters_lopmr), R_norm_lopmr, 'k-', label='LOPMR', linewidth=2)
 
 ax.set_xlabel('Iteration, ' + r'$i$', fontsize=fontsize)

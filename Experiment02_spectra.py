@@ -47,12 +47,12 @@ fontsize = 10.5
 
 A_spectrum = np.load("data/Experiment02_" + matrix + "_spectrum.npz")**-1
 M_spectrum_lopmr = np.load("data/Experiment02_" + matrix + "_spectrum_lopmr.npz")
-M_spectrum_pcr = np.load("data/Experiment02_" + matrix + "_spectrum_pcr.npz")
+M_spectrum_pcg = np.load("data/Experiment02_" + matrix + "_spectrum_pcg.npz")
 M_spectrum_pmr = np.load("data/Experiment02_" + matrix + "_spectrum_pmr.npz")
 
 spectra = {r'$A^{-1}$': A_spectrum,
            'LOPMR': M_spectrum_lopmr,
-           'PCR': M_spectrum_pcr,
+           'PCR': M_spectrum_pcg,
            'PMR': M_spectrum_pmr}
 
 fig = plot_spectra_simple(spectra, matrix, fontsize=fontsize)

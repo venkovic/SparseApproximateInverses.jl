@@ -1,5 +1,5 @@
 push!(LOAD_PATH, ".")
-using MySPAI: pmr_spai, pcr_spai, lopmr_spai
+using MySPAI: pmr_spai, pcg_spai, lopmr_spai
 
 using Random: seed!
 using SparseArrays
@@ -50,7 +50,7 @@ elseif matrix == "wathen100" # Random 2D/3D problem
   # pmr and pcr make no progress after 100 iterations
   itmax = Dict("pmr"=>100, "pcr"=>100, "lopmr"=>100)
 elseif matrix == "Poisson32k" # Random Poisson PDE
-  A = mmread(matrix_source * "Poisson_SExp_sig21.0_L0.1_DoF32000_K.mtx")
+  A = mmread(matrix_source * "Poisson32k.mtx")
   n = A.n # n = 31,839 | nnz = 221,375 
   tol = 10.
   # pmr and pcr make no progress after 100 iterations
@@ -77,9 +77,9 @@ println("val_SR = $val_SR")
 npzwrite("data/Experiment05_" * matrix * "_metadata_pmr_spai.npz", 
          [val_LR, val_SR])
 
-dt = @elapsed M, R_norm = pcr_spai(A, Pr, copy(M0), itmax["pcr"], tol, s)
-npzwrite("data/Experiment05_" * matrix * "_R_norm_pcr_spai.npz", R_norm)
-mmwrite("data/Experiment05_" * matrix * "_M_pcr_spai.mtx", M)
+dt = @elapsed M, R_norm = pcg_spai(A, Pr, copy(M0), itmax["pcg"], tol, s)
+npzwrite("data/Experiment05_" * matrix * "_R_norm_pcg_spai.npz", R_norm)
+mmwrite("data/Experiment05_" * matrix * "_M_pcg_spai.mtx", M)
 val_LR = real(eigs(M, nev=1, which=:LR, tol=1e-3, maxiter=2_000)[1][1]); println("val_LR = $val_LR")
 val_SR = try
   real(eigs(M, nev=1, which=:SR, tol=1e-3, maxiter=3_000)[1][1])
@@ -87,7 +87,7 @@ catch
   real(eigs(M, nev=1, sigma=-100.0, which=:LM, tol=1e-3, maxiter=3000)[1][1])
 end
 println("val_SR = $val_SR")
-npzwrite("data/Experiment05_" * matrix * "_metadata_pcr_spai.npz", 
+npzwrite("data/Experiment05_" * matrix * "_metadata_pcg_spai.npz", 
          [val_LR, val_SR])
 
 dt = @elapsed M, R_norm = lopmr_spai(A, Pr, copy(M0), itmax["lopmr"], tol, s)

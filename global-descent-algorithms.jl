@@ -499,7 +499,7 @@ function psd(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   return M, R_norm[1:i+1]
 end
 
-function cg(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
+function ncg(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   G = spzeros(n, n)
@@ -538,7 +538,7 @@ function cg(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
       err = backward_error[i + 1]
     end
     s = nnz(M) / n^2
-    println("cg it = $i, err = $err, 
+    println("ncg it = $i, err = $err, 
              nnz(M)/n^2 = $s,
              nnz(P)/n^2 = $(nnz(P)/n^2)")
     if (err < tol) || (s > smax)
@@ -555,7 +555,7 @@ function cg(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
   return M, R_norm[1:i+1]
 end
 
-function pcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
+function npcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   Z = spzeros(n, n)
@@ -599,7 +599,7 @@ function pcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
       err = backward_error[i + 1]
     end
     s = nnz(M) / n^2
-    println("pcg it = $i, err = $err, 
+    println("npcg it = $i, err = $err, 
              nnz(M)/n^2 = $s,
              nnz(P)/n^2 = $(nnz(P)/n^2)")
     if (err < tol) || (s > smax)
@@ -616,7 +616,7 @@ function pcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   return M, R_norm[1:i+1]
 end
 
-function cr(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
+function cg(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   P = spzeros(n, n)
@@ -652,7 +652,7 @@ function cr(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
       err = backward_error[i + 1]
     end
     s = nnz(M) / n^2
-    println("cr it = $i, err = $err, 
+    println("cg it = $i, err = $err, 
              nnz(M)/n^2 = $s, 
              nnz(P)/n^2 = $(nnz(P)/n^2)")
     if (err < tol) || (s > smax)
@@ -669,7 +669,7 @@ function cr(A, M, itmax, tol; stopping_criterion=:res, smax=1.)
   return M, R_norm[1:i+1]
 end
 
-function pcr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
+function pcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   P = spzeros(n, n)
@@ -708,7 +708,7 @@ function pcr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
       err = backward_error[i + 1]
     end
     s = nnz(M) / n^2
-    println("pcr it = $i, err = $err, 
+    println("pcg it = $i, err = $err, 
              nnz(M)/n^2 = $s, 
              nnz(P)/n^2 = $(nnz(P)/n^2)")
     if (err < tol) || (s > smax)
@@ -725,7 +725,7 @@ function pcr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   return M, R_norm[1:i+1]
 end
 
-function pcr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
+function pcg_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
   n = A.n
   m = round(Int, s * n * n)
   R = spzeros(n, n)
@@ -780,7 +780,7 @@ function pcr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=fal
       backward_error[i + 1] = R_norm[i + 1] / (A_norm * M_norm + sqrt(n))
       err = backward_error[i + 1]
     end
-    println("pcr-spai it = $i, err = $err, 
+    println("pcg-spai it = $i, err = $err, 
              nnz(M)/n^2 = $(nnz(M)/n^2), 
              nnz(P)/n^2 = $(nnz(P)/n^2)")
     if (err < tol)
@@ -801,7 +801,7 @@ function pcr_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=fal
   return M, R_norm[1:i+1]
 end
 
-function lopcr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
+function lopcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
   n = A.n
   R = spzeros(n, n)
   Z = spzeros(n, n)
@@ -853,7 +853,7 @@ function lopcr(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1.)
       err = backward_error[i + 1]
     end
     s = nnz(M) / n^2
-    println("lopcr it = $i, err = $err, 
+    println("lopcg it = $i, err = $err, 
              nnz(M)/n^2 = $s, 
              nnz(P)/n^2 = $(nnz(P)/n^2)")
     if (err < tol) || (s > smax)

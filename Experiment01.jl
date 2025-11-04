@@ -1,6 +1,6 @@
 push!(LOAD_PATH, ".")
-using MySPAI: mr, sd, cg, cr, 
-              pmr, psd, pcg, pcr, lopmr, lopcr
+using MySPAI: mr, sd, ncg, cg, 
+              pmr, psd, lpcg, pcg, lopmr, lopcg
 
 using Random: seed!
 using SparseArrays
@@ -79,12 +79,12 @@ npzwrite("data/Experiment01_" * matrix * "_spectrum.npz", eigvals(Matrix(A)))
 #mmwrite("data/Experiment01_" * matrix * "_M_sd.mtx", M)
 #npzwrite("data/Experiment01_" * matrix * "_spectrum_sd.npz", eigvals(Matrix((M+M')./2.)))
 
-#dt_cg = @elapsed M, R_norm = cg(A, copy(M0), itmax, tol)
-#npzwrite("data/Experiment01_" * matrix * "_R_norm_cg.npz", R_norm)
-#mmwrite("data/Experiment01_" * matrix * "_M_cg.mtx", M)
-#npzwrite("data/Experiment01_" * matrix * "_spectrum_cg.npz", eigvals(Matrix((M+M')./2.)))
+#dt_ncg = @elapsed M, R_norm = ncg(A, copy(M0), itmax, tol)
+#npzwrite("data/Experiment01_" * matrix * "_R_norm_ncg.npz", R_norm)
+#mmwrite("data/Experiment01_" * matrix * "_M_ncg.mtx", M)
+#npzwrite("data/Experiment01_" * matrix * "_spectrum_ncg.npz", eigvals(Matrix((M+M')./2.)))
 
-#dt_cr = @elapsed M, R_norm = csd(A, copy(M0), itmax, tol)
+#dt_cg = @elapsed M, R_norm = csd(A, copy(M0), itmax, tol)
 #npzwrite("data/Experiment01_" * matrix * "_R_norm_cr.npz", R_norm)
 #mmwrite("data/Experiment01_" * matrix * "_M_cr.mtx", M)
 #npzwrite("data/Experiment01_" * matrix * "_spectrum_cr.npz", eigvals(Matrix((M+M')./2.)))
@@ -99,23 +99,23 @@ npzwrite("data/Experiment01_" * matrix * "_R_norm_psd.npz", R_norm)
 mmwrite("data/Experiment01_" * matrix * "_M_psd.mtx", M)
 npzwrite("data/Experiment01_" * matrix * "_spectrum_psd.npz", eigvals(Matrix((M+M')./2.)))
 
+dt_npcg = @elapsed M, R_norm = npcg(A, Pr, copy(M0), itmax, tol)
+npzwrite("data/Experiment01_" * matrix * "_R_norm_npcg.npz", R_norm)
+mmwrite("data/Experiment01_" * matrix * "_M_npcg.mtx", M)
+npzwrite("data/Experiment01_" * matrix * "_spectrum_npcg.npz", eigvals(Matrix((M+M')./2.)))
+
 dt_pcg = @elapsed M, R_norm = pcg(A, Pr, copy(M0), itmax, tol)
 npzwrite("data/Experiment01_" * matrix * "_R_norm_pcg.npz", R_norm)
 mmwrite("data/Experiment01_" * matrix * "_M_pcg.mtx", M)
 npzwrite("data/Experiment01_" * matrix * "_spectrum_pcg.npz", eigvals(Matrix((M+M')./2.)))
-
-dt_pcr = @elapsed M, R_norm = pcr(A, Pr, copy(M0), itmax, tol)
-npzwrite("data/Experiment01_" * matrix * "_R_norm_pcr.npz", R_norm)
-mmwrite("data/Experiment01_" * matrix * "_M_pcr.mtx", M)
-npzwrite("data/Experiment01_" * matrix * "_spectrum_pcr.npz", eigvals(Matrix((M+M')./2.)))
 
 dt_lopmr = @elapsed M, R_norm = lopmr(A, Pr, copy(M0), itmax, tol)
 npzwrite("data/Experiment01_" * matrix * "_R_norm_lopmr.npz", R_norm)
 mmwrite("data/Experiment01_" * matrix * "_M_lopmr.mtx", M)
 npzwrite("data/Experiment01_" * matrix * "_spectrum_lopmr.npz", eigvals(Matrix((M+M')./2.)))
 
-# LOPCR is equivalent to PCR, just more expensive to compute.
-#dt_lopcr = @elapsed M, R_norm = lopcr(A, Pr, copy(M0), itmax, tol)
-#npzwrite("data/Experiment01_" * matrix * "_R_norm_lopcr.npz", R_norm)
-#mmwrite("data/Experiment01_" * matrix * "_M_lopcr.mtx", M)
-#npzwrite("data/Experiment01_" * matrix * "_spectrum_lopcr.npz", eigvals(Matrix((M+M')./2.)))
+# LOPCG is equivalent to PCG, just more expensive to compute.
+#dt_lopcg = @elapsed M, R_norm = lopcg(A, Pr, copy(M0), itmax, tol)
+#npzwrite("data/Experiment01_" * matrix * "_R_norm_lopcg.npz", R_norm)
+#mmwrite("data/Experiment01_" * matrix * "_M_lopcg.mtx", M)
+#npzwrite("data/Experiment01_" * matrix * "_spectrum_lopcg.npz", eigvals(Matrix((M+M')./2.)))
