@@ -7,7 +7,7 @@ plt.rc('text.latex', preamble=r'\usepackage{amssymb} \usepackage{amsmath}')
 plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
-matrix = "msc04515" # \in {"bcsstk21", "tri100eigs4k", "msc04515"}
+matrix = "bcsstk21" # \in {"bcsstk21", "tri100eigs4k", "msc04515"}
 fontsize = 10.5
 
 R_norm_pmr = np.load("data/Experiment02_" + matrix + "_backward_error_pmr.npz")

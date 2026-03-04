@@ -7,7 +7,7 @@ plt.rc('text.latex', preamble=r'\usepackage{amssymb} \usepackage{amsmath}')
 plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 
-matrix = "bcsstk21"  # \in {"bcsstk21", 
+matrix = "tri100eigs4k"  # \in {"bcsstk21", 
                       #      "tri100eigs4k", 
                       #      "triclust4k",
                       #      "triunif4k",
@@ -44,3 +44,22 @@ ax.tick_params(labelsize=fontsize)
 
 plt.tight_layout()
 plt.savefig("img/Experiment01_" + matrix + "_R_norms.png", bbox_inches='tight', dpi=300)
+
+
+
+fig, ax = plt.subplots(figsize=(5.5, 3))
+
+ax.semilogy(np.arange(0, iters_psd), R_norm_psd, 'k--', label='SD', linewidth=2)
+ax.semilogy(np.arange(0, iters_pmr), R_norm_pmr, color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='MR', linewidth=2)
+ax.semilogy(np.arange(0, iters_pcg), R_norm_pcg, 'k:', label='CG', linewidth=2)
+ax.semilogy(np.arange(0, iters_lopmr), R_norm_lopmr, 'k-', label='LOMR', linewidth=2)
+
+ax.set_xlabel('Iteration, ' + r'$i$', fontsize=fontsize)
+ax.set_ylabel('Residual norm, ' + r'$\|R_i\|_F$', fontsize=fontsize)
+ax.set_title(matrix, fontsize=fontsize)
+ax.legend(fontsize=fontsize)
+ax.grid(True, alpha=0.3)
+ax.tick_params(labelsize=fontsize)
+
+plt.tight_layout()
+plt.savefig("img/Experiment01_" + matrix + "_R_norms_SIAM_PP26.png", bbox_inches='tight', dpi=300)

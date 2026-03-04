@@ -33,11 +33,17 @@ ax_spy_pmr = fig.add_subplot(gs[0, 1])
 ax_spy_pcg = fig.add_subplot(gs[1, 1])
 ax_spy_lopmr = fig.add_subplot(gs[2, 1])
 
-ax_conv.semilogy(np.arange(0, iters_pmr), R_norm_pmr, color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='PMR-SPAI', linewidth=2)
-ax_conv.semilogy(np.arange(0, iters_pcg), R_norm_pcg, 'k:', label='PCG-SPAI', linewidth=2)
-ax_conv.semilogy(np.arange(0, iters_lopmr), R_norm_lopmr, 'k-', label='LOPMR-SPAI', linewidth=2)
+#ax_conv.semilogy(np.arange(0, iters_pmr), R_norm_pmr, color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='PMR-SPAI', linewidth=2)
+#ax_conv.semilogy(np.arange(0, iters_pcg), R_norm_pcg, 'k:', label='PCG-SPAI', linewidth=2)
+#ax_conv.semilogy(np.arange(0, iters_lopmr), R_norm_lopmr, 'k-', label='LOPMR-SPAI', linewidth=2)
 
-ax_conv.set_xlabel('Global SPAI iteration, ' + r'$i$', fontsize=fontsize)
+ax_conv.semilogy(np.arange(0, iters_pmr), R_norm_pmr, color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='MR', linewidth=2)
+ax_conv.semilogy(np.arange(0, iters_pcg), R_norm_pcg, 'k:', label='CG', linewidth=2)
+ax_conv.semilogy(np.arange(0, iters_lopmr), R_norm_lopmr, 'k-', label='LOMR', linewidth=2)
+
+
+#ax_conv.set_xlabel('Global SPAI iteration, ' + r'$i$', fontsize=fontsize)
+ax_conv.set_xlabel('Approximate inverse iteration, ' + r'$i$', fontsize=fontsize)
 ax_conv.set_ylabel('Residual norm, ' + r'$\|R_i\|_F$', fontsize=fontsize)
 ax_conv.set_title(matrix, fontsize=fontsize)
 ax_conv.legend(fontsize=fontsize)
@@ -55,7 +61,9 @@ else:
   ax_spy_pmr.set_aspect('equal')
 ax_spy_pmr.set_xticks([])
 ax_spy_pmr.set_yticks([])
-ax_spy_pmr.set_title('PMR', fontsize=fontsize)
+#ax_spy_pmr.set_title('PMR', fontsize=fontsize)
+ax_spy_pmr.set_title('MR', fontsize=fontsize)
+
 
 M = mmread("data/Experiment05_" + matrix + "_M_pcg_spai.mtx")
 if False:
@@ -68,7 +76,9 @@ else:
   ax_spy_pcg.set_aspect('equal')
 ax_spy_pcg.set_xticks([])
 ax_spy_pcg.set_yticks([])
-ax_spy_pcg.set_title('PCG', fontsize=fontsize)
+#ax_spy_pcg.set_title('PCG', fontsize=fontsize)
+ax_spy_pcg.set_title('CG', fontsize=fontsize)
+
 
 M = mmread("data/Experiment05_" + matrix + "_M_lopmr_spai.mtx")
 if False:
@@ -81,7 +91,9 @@ else:
   ax_spy_lopmr.set_aspect('equal')
 ax_spy_lopmr.set_xticks([])
 ax_spy_lopmr.set_yticks([])
-ax_spy_lopmr.set_title('LOPMR', fontsize=fontsize)
+#ax_spy_lopmr.set_title('LOPMR', fontsize=fontsize)
+ax_spy_lopmr.set_title('LOMR', fontsize=fontsize)
 
 plt.tight_layout()
-plt.savefig("img/Experiment05_" + matrix + ".png", bbox_inches='tight', dpi=300)
+#plt.savefig("img/Experiment05_" + matrix + ".png", bbox_inches='tight', dpi=300)
+plt.savefig("img/Experiment05_" + matrix + "_SIAM_PP26.png", bbox_inches='tight', dpi=300)

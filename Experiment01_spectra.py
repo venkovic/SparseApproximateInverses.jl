@@ -41,7 +41,7 @@ def plot_spectra_simple(spectra_dict, matrix_name, figsize=(5.5, 3.5), fontsize=
     return fig
 
 
-matrix = "bcsstk21"  # \in {"bcsstk21", 
+matrix = "tri100eigs4k"  # \in {"bcsstk21", 
                       #      "tri100eigs4k", 
                       #      "triclust4k",
                       #      "triunif4k",
@@ -65,3 +65,13 @@ spectra = {r'$A^{-1}$': A_spectrum,
 
 fig = plot_spectra_simple(spectra, matrix, fontsize=fontsize)
 plt.savefig("img/Experiment01_" + matrix + "_spectra.png", bbox_inches='tight', dpi=300)
+
+
+spectra = {r'$A^{-1}$': A_spectrum,
+           'LOMR': M_spectrum_lopmr,
+           'CG': M_spectrum_pcg,
+           'MR': M_spectrum_pmr,
+           'SD': M_spectrum_psd}
+
+fig = plot_spectra_simple(spectra, matrix, fontsize=fontsize)
+plt.savefig("img/Experiment01_" + matrix + "_spectra_SIAM_PP26.png", bbox_inches='tight', dpi=300)

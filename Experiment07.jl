@@ -12,7 +12,7 @@ using NPZ
 matrix_source = "../matrix-market/"
 
 
-matrix = "Poisson32k"# \in {"bundle1", 
+matrix = "Poisson32k" # \in {"bundle1", 
                    #      "4bw100eigs20k", 
                    #      "4bw100eigs20k2", 
                    #      "rand20k",
