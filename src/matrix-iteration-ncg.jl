@@ -69,12 +69,12 @@ end
 
 
 """
-npcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1., ExplicitResidualUpdate=false)
+npcg_spd(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1., ExplicitResidualUpdate=false)
 
 Nonlinear preconditioned conjugate gradient method for approximate matrix inverses.
 
 """
-function npcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1., ExplicitResidualUpdate=false)
+function npcg_spd(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1., ExplicitResidualUpdate=false)
   n = A.n
   R = spzeros(n, n)
   Z = spzeros(n, n)
