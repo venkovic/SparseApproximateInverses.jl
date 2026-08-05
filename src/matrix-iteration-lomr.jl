@@ -84,7 +84,7 @@ end
 
 
 """
-lopmr_spd_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
+lopmr_spd_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false, dropping=:hardthresholding)
 
 Locally optimal preconditioned minimal residual method for sparse SPD approximate matrix 
 inverses with SPD preconditioner.

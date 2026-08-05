@@ -137,7 +137,7 @@ end
 
 
 """
-pcg_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
+pcg_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false, dropping=:hardthresholding)
 
 Preconditioned conjugate gradient method for sparse approximate matrix 
 inverses with SPD preconditioner.
