@@ -1,4 +1,4 @@
-function dropping_M!(M, W, R, AR, D, A, m)
+function apply_heuristic!(M, W, R, AR, D, A, m)
   M .+= M'
   M ./= 2.
   droptol!(M, eps(Float64))
@@ -36,7 +36,7 @@ function dropping_M!(M, W, R, AR, D, A, m)
   R .= I - A * M
 end
 
-function dropping_P!(P, m)
+function apply_hardthreshold!(P, m)
   droptol!(P, eps(Float64))
   if nnz(P) <= m
     return
