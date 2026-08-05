@@ -26,8 +26,11 @@ include("matrix-iteration-ncg.jl")
 export pcg
 include("vector-iteration-pcg.jl")
 
-export self_precond_mr, self_precond_lomr
-include("self-preconditioned-variants.jl")
+export self_precond_mr
+include("self-preconditioned-mr.jl")
+
+export self_precond_lomr
+include("self-preconditioned-lomr.jl")
 
 include("dropping-strategies.jl")
 
