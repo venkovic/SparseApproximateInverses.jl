@@ -143,7 +143,7 @@ Preconditioned conjugate gradient method for sparse approximate matrix
 inverses with SPD preconditioner.
 
 """
-function pcg_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
+function pcg_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false, dropping=:hardthresholding)
   n = A.n
   m = round(Int, s * n * n)
   R = spzeros(n, n)
@@ -167,7 +167,12 @@ function pcg_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=fal
     _, pcg_iters[1], _ = pcg(A, b, zeros(n), M, 1e-6, n)
     println("pcg iters = $(pcg_iters[1])")
   end
-  dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
+  if dropping == :hardthresholding
+    apply_hardthreshold!(M, m)
+    R .= I - A * M 
+  elseif dropping == :heuristic
+    apply_heuristic!(M, W, R, AR, A_cols_dot_prods, A, m)
+  end 
   Z .= Pr * R
   R_Z_frob = frob_inner_prod(R, Z)
   P .= Z
@@ -185,7 +190,12 @@ function pcg_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=fal
     alpha = R_Z_frob / P_AP_frob
     beta = 1. / R_Z_frob
     M .+= alpha .* P
-    dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
+    if dropping == :hardthresholding
+      apply_hardthreshold!(M, m)
+      R .= I - A * M 
+    elseif dropping == :heuristic
+      apply_heuristic!(M, W, R, AR, A_cols_dot_prods, A, m)
+    end  
     Z .= Pr * R
     R_Z_frob = frob_inner_prod(R, Z)
     i += 1
@@ -210,7 +220,7 @@ function pcg_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=fal
     beta *= R_Z_frob
     P .*= beta
     P .+= Z
-    dropping_P!(P, m)
+    apply_hardthreshold!(P, m)
     AP .= A * P
   end
   if stopping_criterion == :backward_error
