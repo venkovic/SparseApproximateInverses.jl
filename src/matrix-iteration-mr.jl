@@ -250,7 +250,7 @@ end
 
 
 """
-pmr_spd_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
+pmr_spd_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false, dropping=:hardthresholding)
 
 Preconditioned minimal residual (MR) method for sparse approximate matrix inverses
 with non-zero dropping and SPD preconditioner.
@@ -280,7 +280,12 @@ function pmr_spd_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg
     _, pcg_iters[1], _ = pcg(A, b, zeros(n), M, 1e-6, n)
     println("pcg iters = $(pcg_iters[1])")
   end
-  dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
+  if dropping == :hardthresholding
+    apply_hardthreshold!(M, m)
+    R .= I - A * M 
+  elseif dropping == :heuristic
+    apply_heuristic!(M, W, R, AR, A_cols_dot_prods, A, m)
+  end 
   Z .= Pr * R
   AZ .= A * Z
   i = 0
@@ -295,7 +300,12 @@ function pmr_spd_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg
     AZ_PrAZ_frob = frob_inner_prod(AZ, PrAZ)
     alpha = Z_AZ_frob / AZ_PrAZ_frob
     M .+= alpha .* Z
-    dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
+    if dropping == :hardthresholding
+      apply_hardthreshold!(M, m)
+      R .= I - A * M 
+    elseif dropping == :heuristic
+      apply_heuristic!(M, W, R, AR, A_cols_dot_prods, A, m)
+    end  
     Z .= Pr * R
     AZ .= A * Z
     PrAZ = Pr * AZ
@@ -358,7 +368,12 @@ function pmr_l_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=f
     _, pcg_iters[1], _ = pcg(A, b, zeros(n), M, 1e-6, n)
     println("pcg iters = $(pcg_iters[1])")
   end
-  dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
+  if dropping == :hardthresholding
+    apply_hardthreshold!(M, m)
+    R .= I - A * M 
+  elseif dropping == :heuristic
+    apply_heuristic!(M, W, R, AR, A_cols_dot_prods, A, m)
+  end 
   Z .= Pr * R
   AZ .= A * Z
   i = 0
@@ -373,7 +388,12 @@ function pmr_l_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=f
     AZ_norm_square = frob_norm_squared(AZ)
     alpha = R_AZ_frob / AZ_norm_square
     M .+= alpha .* Z
-    dropping_M!(M, W, R, AR, A_cols_dot_prods, A, m)
+    if dropping == :hardthresholding
+      apply_hardthreshold!(M, m)
+      R .= I - A * M 
+    elseif dropping == :heuristic
+      apply_heuristic!(M, W, R, AR, A_cols_dot_prods, A, m)
+    end 
     Z .= Pr * R
     AZ .= A * Z
     i += 1
