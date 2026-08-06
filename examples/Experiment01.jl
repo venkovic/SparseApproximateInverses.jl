@@ -78,7 +78,7 @@ Pr = spdiagm(diag(A).^-1)
 M0 = spdiagm(ones(n))
 
 
-#npzwrite("data/Experiment01_" * matrix * "_spectrum.npz", eigvals(Matrix(A)))
+npzwrite("data/Experiment01_" * matrix * "_spectrum.npz", eigvals(Matrix(A)))
 
 #dt_mr = @elapsed, R_norm = mr(A, copy(M0), itmax, tol)
 #npzwrite("data/Experiment01_" * matrix * "_R_norm_mr.npz", R_norm)
