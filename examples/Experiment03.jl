@@ -14,7 +14,7 @@ using NPZ
 matrix_source = "data/mtcs/spd/"
 
 
-matrix = "rand20k2"  # \in {"bundle1", 
+matrix = "bundle1"   # \in {"bundle1", 
                      #      "4bw100eigs20k", 
                      #      "4bw100eigs20k2"
                      #      "rand20k",
@@ -97,7 +97,7 @@ function check_diagonal_dominance(A)
 end
 
 
-tol = 1.
+tol = 1e-11
 smax = .03
 
 
