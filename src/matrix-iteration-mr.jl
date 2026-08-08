@@ -256,7 +256,7 @@ Preconditioned minimal residual (MR) method for sparse approximate matrix invers
 with non-zero dropping and SPD preconditioner.
 
 """
-function pmr_spd_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false)
+function pmr_spd_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=false, dropping=:hardthresholding)
   n = A.n
   m = round(Int, s * n * n)
   R = spzeros(n, n)
@@ -286,8 +286,10 @@ function pmr_spd_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg
   elseif dropping == :heuristic
     apply_heuristic!(M, W, R, AR, A_cols_dot_prods, A, m)
   end 
+  R .= I - A * M
   Z .= Pr * R
   AZ .= A * Z
+  PrAZ .= Pr * AZ
   i = 0
   R_norm[i + 1] = frob_norm(R)
   densities[i + 1] = nnz(M) / n^2
