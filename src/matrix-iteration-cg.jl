@@ -176,7 +176,7 @@ function pcg_spai(A, Pr, M, itmax, tol, s; stopping_criterion=:res, eval_pcg=fal
   Z .= Pr * R
   R_Z_frob = frob_inner_prod(R, Z)
   P .= Z
-  dropping_P!(P, m)
+   apply_hardthreshold!(P, m)
   AP .= A * P
   i = 0
   R_norm[i + 1] = frob_norm(R)
