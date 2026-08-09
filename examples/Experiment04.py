@@ -1,0 +1,52 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.io import mmread
+import matplotlib.gridspec as gridspec
+from matplotlib.ticker import MaxNLocator
+
+plt.rc('text.latex', preamble=r'\usepackage{amssymb} \usepackage{amsmath}')
+plt.rc('text', usetex=True)
+plt.rc('font', family='serif')
+
+matrix = "4bw100eigs20k2"
+
+fontsize = 10.5
+
+nreals = 100
+
+res_cg = [np.load("data/Experiment04_" + matrix + "_cg-res_real%d.npz" % (ireal + 1)) for ireal in range(nreals)]
+res_pmr = [np.load("data/Experiment04_" + matrix + "_pcg-res_pmr_real%d.npz" % (ireal + 1)) for ireal in range(nreals)]
+res_pcg = [np.load("data/Experiment04_" + matrix + "_pcg-res_pcg_real%d.npz" % (ireal + 1)) for ireal in range(nreals)]
+res_lopmr = [np.load("data/Experiment04_" + matrix + "_pcg-res_lopmr_real%d.npz" % (ireal + 1)) for ireal in range(nreals)]
+
+#iters_cg = len(res_cg)
+#iters_pmr = min(len(res_pmr), 2 * iters_cg)
+#iters_pcg = min(len(res_pcg), 2 * iters_cg)
+#iters_lopmr = min(len(res_lopmr), 2 * iters_cg)
+
+fig, ax = plt.subplots(figsize=(5.5, 3))
+
+ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+
+lw = .3
+
+ax.semilogy(np.arange(0, len(res_cg[0])), res_cg[0], 'r-', label='cg', linewidth=lw)
+ax.semilogy(np.arange(0, len(res_pmr[0])), res_pmr[0], color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='pcg (PMR_SPD SPAI)', linewidth=lw)
+ax.semilogy(np.arange(0, len(res_pcg[0])), res_pcg[0], 'k:', label='pcg (PCG SPAI)', linewidth=lw)
+ax.semilogy(np.arange(0, len(res_lopmr[0])), res_lopmr[0], 'k-', label='pcg (LOPMR_SPD SPAI)', linewidth=lw)
+
+for ireal in range(1, nreals):
+  ax.semilogy(np.arange(0, len(res_cg[ireal])), res_cg[ireal], 'r-', linewidth=lw)
+  ax.semilogy(np.arange(0, len(res_pmr[ireal])), res_pmr[ireal], color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), linewidth=lw)
+  ax.semilogy(np.arange(0, len(res_pcg[ireal])), res_pcg[ireal], 'k:', linewidth=lw)
+  ax.semilogy(np.arange(0, len(res_lopmr[ireal])), res_lopmr[ireal], 'k-', linewidth=lw)
+
+ax.set_xlabel('Iteration, ' + r'$i$', fontsize=fontsize)
+ax.set_ylabel('Backward error, ' + r'$\|r_i\|_2/\|b\|_2$', fontsize=fontsize)
+ax.set_title(matrix, fontsize=fontsize)
+ax.legend(fontsize=fontsize)
+ax.grid(True, alpha=0.3)
+ax.tick_params(labelsize=fontsize)
+
+plt.tight_layout()
+plt.savefig("img/Experiment04_" + matrix + "_pcg-res_norms.png", bbox_inches='tight', dpi=300)
