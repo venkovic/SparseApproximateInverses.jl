@@ -28,9 +28,9 @@ ax_spy_pmr = fig.add_subplot(gs[0, 1])
 ax_spy_pcg = fig.add_subplot(gs[1, 1])
 ax_spy_lopmr = fig.add_subplot(gs[2, 1])
 
-ax_conv.semilogy(np.arange(0, iters_pmr), R_norm_pmr, color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='PMR-SPAI', linewidth=2)
-ax_conv.semilogy(np.arange(0, iters_pcg), R_norm_pcg, 'k:', label='PCG SPAI', linewidth=2)
-ax_conv.semilogy(np.arange(0, iters_lopmr), R_norm_lopmr, 'k-', label='LOPMR_SPD SPAI', linewidth=2)
+ax_conv.semilogy(np.arange(0, iters_pmr), R_norm_pmr, color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='PMR_SPD', linewidth=2)
+ax_conv.semilogy(np.arange(0, iters_pcg), R_norm_pcg, 'k:', label='PCG', linewidth=2)
+ax_conv.semilogy(np.arange(0, iters_lopmr), R_norm_lopmr, 'k-', label='LOPMR_SPD', linewidth=2)
 
 ax_conv.set_xlabel('Iteration, ' + r'$i$', fontsize=fontsize)
 ax_conv.set_ylabel('Residual norm, ' + r'$\|R_i\|_F$', fontsize=fontsize)
@@ -50,7 +50,7 @@ else:
   ax_spy_pmr.set_aspect('equal')
 ax_spy_pmr.set_xticks([])
 ax_spy_pmr.set_yticks([])
-ax_spy_pmr.set_title('PMR', fontsize=fontsize)
+ax_spy_pmr.set_title('PMR_SPD', fontsize=fontsize)
 
 M = mmread("data/Experiment03_" + matrix + "_M_pcg.mtx")
 if False:
@@ -76,7 +76,7 @@ else:
   ax_spy_lopmr.set_aspect('equal')
 ax_spy_lopmr.set_xticks([])
 ax_spy_lopmr.set_yticks([])
-ax_spy_lopmr.set_title('LOPMR', fontsize=fontsize)
+ax_spy_lopmr.set_title('LOPMR_SPD', fontsize=fontsize)
 
 plt.tight_layout()
 plt.savefig("img/Experiment03_" + matrix + ".png", bbox_inches='tight', dpi=300)

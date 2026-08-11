@@ -12,7 +12,7 @@ matrix = "4bw100eigs20k2"
 
 fontsize = 10.5
 
-nreals = 100
+nreals = 20
 
 res_cg = [np.load("data/Experiment04_" + matrix + "_cg-res_real%d.npz" % (ireal + 1)) for ireal in range(nreals)]
 res_pmr = [np.load("data/Experiment04_" + matrix + "_pcg-res_pmr_real%d.npz" % (ireal + 1)) for ireal in range(nreals)]
@@ -28,18 +28,18 @@ fig, ax = plt.subplots(figsize=(5.5, 3))
 
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 
-lw = .3
+lw = .5
 
-ax.semilogy(np.arange(0, len(res_cg[0])), res_cg[0], 'r-', label='cg', linewidth=lw)
-ax.semilogy(np.arange(0, len(res_pmr[0])), res_pmr[0], color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), label='pcg (PMR_SPD SPAI)', linewidth=lw)
-ax.semilogy(np.arange(0, len(res_pcg[0])), res_pcg[0], 'k:', label='pcg (PCG SPAI)', linewidth=lw)
-ax.semilogy(np.arange(0, len(res_lopmr[0])), res_lopmr[0], 'k-', label='pcg (LOPMR_SPD SPAI)', linewidth=lw)
+ax.semilogy(np.arange(0, len(res_cg[0])), res_cg[0], 'r-', label='pcg (Jacobi)', linewidth=lw)
+ax.semilogy(np.arange(0, len(res_pmr[0])), res_pmr[0], 'c-', label='pcg (PMR_SPD SPAI)', linewidth=lw)
+ax.semilogy(np.arange(0, len(res_pcg[0])), res_pcg[0], 'k-', label='pcg (PCG SPAI)', linewidth=lw)
+ax.semilogy(np.arange(0, len(res_lopmr[0])), res_lopmr[0], 'g-', label='pcg (LOPMR_SPD SPAI)', linewidth=lw)
 
 for ireal in range(1, nreals):
   ax.semilogy(np.arange(0, len(res_cg[ireal])), res_cg[ireal], 'r-', linewidth=lw)
-  ax.semilogy(np.arange(0, len(res_pmr[ireal])), res_pmr[ireal], color='k', linestyle=(0, (3, 1, 1, 1, 1, 1)), linewidth=lw)
-  ax.semilogy(np.arange(0, len(res_pcg[ireal])), res_pcg[ireal], 'k:', linewidth=lw)
-  ax.semilogy(np.arange(0, len(res_lopmr[ireal])), res_lopmr[ireal], 'k-', linewidth=lw)
+  ax.semilogy(np.arange(0, len(res_pmr[ireal])), res_pmr[ireal], 'c-', linewidth=lw)
+  ax.semilogy(np.arange(0, len(res_pcg[ireal])), res_pcg[ireal], 'k-', linewidth=lw)
+  ax.semilogy(np.arange(0, len(res_lopmr[ireal])), res_lopmr[ireal], 'g-', linewidth=lw)
 
 ax.set_xlabel('Iteration, ' + r'$i$', fontsize=fontsize)
 ax.set_ylabel('Backward error, ' + r'$\|r_i\|_2/\|b\|_2$', fontsize=fontsize)

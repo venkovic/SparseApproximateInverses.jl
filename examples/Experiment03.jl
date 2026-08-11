@@ -107,8 +107,8 @@ M0 = spdiagm(ones(n))
 
 dt = @elapsed M, R_norm = pmr_spd(A, Pr, copy(M0), itmax["pmr"], tol, smax=smax)
 npzwrite("data/Experiment03_" * matrix * "_R_norm_pmr_spd.npz", R_norm)
-mmwrite("data/Experiment03_" * matrix * "_M_pmr_spd.mtx", M)
 M .+= M'; M ./ 2.
+mmwrite("data/Experiment03_" * matrix * "_M_pmr_spd.mtx", M)
 val_LR = real(eigs(M, nev=1, which=:LR, tol=1e-3, maxiter=2_000)[1][1]); println("val_LR = $val_LR")
 val_SR = try
   real(eigs(M, nev=1, which=:SR, tol=1e-3, maxiter=3_000)[1][1])
@@ -121,8 +121,8 @@ npzwrite("data/Experiment03_" * matrix * "_metadata_pmr_spd.npz",
 
 dt = @elapsed M, R_norm = pcg(A, Pr, copy(M0), itmax["pcg"], tol, smax=smax)
 npzwrite("data/Experiment03_" * matrix * "_R_norm_pcg.npz", R_norm)
-mmwrite("data/Experiment03_" * matrix * "_M_pcg.mtx", M)
 M .+= M'; M ./ 2.
+mmwrite("data/Experiment03_" * matrix * "_M_pcg.mtx", M)
 val_LR = real(eigs(M, nev=1, which=:LR, tol=1e-3, maxiter=2_000)[1][1]); println("val_LR = $val_LR")
 val_SR = try
   real(eigs(M, nev=1, which=:SR, tol=1e-3, maxiter=3_000)[1][1])
@@ -135,8 +135,8 @@ npzwrite("data/Experiment03_" * matrix * "_metadata_pcg.npz",
 
 dt = @elapsed M, R_norm = lopmr_spd(A, Pr, copy(M0), itmax["lopmr"], tol, smax=smax)
 npzwrite("data/Experiment03_" * matrix * "_R_norm_lopmr_spd.npz", R_norm)
-mmwrite("data/Experiment03_" * matrix * "_M_lopmr_spd.mtx", M)
 M .+= M'; M ./ 2.
+mmwrite("data/Experiment03_" * matrix * "_M_lopmr_spd.mtx", M)
 val_LR = real(eigs(M, nev=1, which=:LR, tol=1e-3, maxiter=2_000)[1][1]); println("val_LR = $val_LR")
 val_SR = try
   real(eigs(M, nev=1, which=:SR, tol=1e-3, maxiter=3_000)[1][1])
