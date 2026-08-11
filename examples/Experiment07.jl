@@ -12,7 +12,7 @@ using MatrixMarket: mmread, mmwrite
 using NPZ
 
 
-matrix_source = "../matrix-market/"
+matrix_source = "data/mtcs/spd/"
 
 
 matrix = "Poisson32k" # \in {"bundle1", 
