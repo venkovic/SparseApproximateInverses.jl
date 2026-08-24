@@ -1,11 +1,16 @@
-function apply_heuristic!(M, W, R, AR, D, A, m)
-  M .+= M'
-  M ./= 2.
-  droptol!(M, eps(Float64))
+ function apply_heuristic!(M, W, R, AR, D, A, m; Symmetrize=false, FirstDropByEps=false)
+  if Symmetrize
+    M .+= M'
+    M ./= 2.
+  end
+  
+  if FirstDropByEps
+    droptol!(M, eps(Float64))
 
-  d_nnz = length(diag(M).nzval)
-  if d_nnz < M.n
-    println("Warning: $(M.n - d_nnz) diagonal components were dropped in M.")
+    d_nnz = length(diag(M).nzval)
+    if d_nnz < M.n
+      println("Warning: $(M.n - d_nnz) diagonal components were dropped in M.")
+    end
   end
 
   R .= I - A * M
@@ -36,8 +41,11 @@ function apply_heuristic!(M, W, R, AR, D, A, m)
   R .= I - A * M
 end
 
-function apply_hardthreshold!(P, m)
-  droptol!(P, eps(Float64))
+function apply_hardthreshold!(P, m, FirstDropByEps=false)
+  if FirstDropByEps
+    droptol!(P, eps(Float64))
+  end
+
   if nnz(P) <= m
     return
   end
