@@ -102,9 +102,9 @@ function pcg(A, Pr, M, itmax, tol; stopping_criterion=:res, smax=1., ExplicitRes
     beta = 1. / R_Z_frob
     M .+= alpha .* P
     if ExplicitResidualUpdate
-      R .-= alpha .* AP
-    else
       R .= I - A * M
+    else
+      R .-= alpha .* AP
     end
     Z .= Pr * R
     R_Z_frob = frob_inner_prod(R, Z)
