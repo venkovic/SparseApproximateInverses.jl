@@ -17,6 +17,9 @@ include("matrix-iteration-lomr.jl")
 export cg, pcg, pcg_spai
 include("matrix-iteration-cg.jl")
 
+export cr, pcr, pcr_spai
+include("matrix-iteration-cr.jl")
+
 export sd, psd_spd, psd_r, psd_l
 include("matrix-iteration-sd.jl")
 
